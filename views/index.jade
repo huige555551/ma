@@ -1,0 +1,25 @@
+extends layout
+
+block body
+  div(ng-controller='mainCtrl')
+    nav.navbar.navbar-default
+      .container
+        .navbar-header
+          a.navbar-brand(ng-href='／') MyAchievement
+        .navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li.active(ng-show='showAuth()')
+              a(ng-href='/signin') {{currentUser.name}}
+            li.active(ng-show='!showAuth()')
+              a(ng-href='/signin') 登录
+
+            li(ng-show='showAuth()')
+              a(ng-href='/signout') 登出
+
+    div(ng-view)
+  script(src='javascripts/lib/angular/angular.js')
+  script(src='javascripts/app.js')
+  script(src='javascripts/services.js')
+  script(src='javascripts/controllers.js')
+  script(src='javascripts/filters.js')
+  script(src='javascripts/directives.js')

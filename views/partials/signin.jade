@@ -1,0 +1,17 @@
+fieldset
+    legend 用户登入
+    form#signin.form-horizontal(method="post",accept-charset="utf-8",role='form')
+        div(ng-show="error") 用户名或者密码错误
+        div.field.form-group
+            lable.col-md-1.control-label(for="username") 用户名
+            div.col-md-2
+                input#username.form-control(type="text",ng-model='form.username',name="username")
+                span.error
+        div.field.form-group
+            lable.col-md-1.control-label(for="password") 密码
+            div.col-md-2
+                input#password.form-control(type="text",ng-model='form.password',name="password")
+                span.error
+        div.field.form-actions.form-group
+            input#reset.btn.btn-default.btn-primary.col-md-1.col-md-offset-1(type="reset",value="重置")
+            input#submit.btn.btn-default.btn-primary.col-md-1(type="submit",ng-click='submitPost()',value="提交")
