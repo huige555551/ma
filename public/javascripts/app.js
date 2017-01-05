@@ -11,9 +11,15 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives'])
     }).when('/signout', {
         templateUrl: 'partials/signout',
         controller: SignoutCtrl
-    }).when('/publishJob', {
-        templateUrl: 'partials/publishJob',
-        controller: PublishJobCtrl
+    }).when('/teacher', {
+        templateUrl: 'partials/teacher',
+        controller: TeacherCtrl
+    }).when('/ta', {
+        templateUrl: 'partials/ta',
+        controller: TaCtrl
+    }).when('/student', {
+        templateUrl: 'partials/student',
+        controller: StudentCtrl
     }).otherwise({
         redirectTo: '/'
     });

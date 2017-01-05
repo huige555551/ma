@@ -1,22 +1,22 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var userSchema = new Schema ({
-    username : {type:String , required : true},
-    password : {type:String , required : true},
-    stuName : {type: String ,required: true},
-    stuGroup: {type: String , required: true},
-    isTA: {type: Boolean , required: true},
-    isAdmin: {type: Boolean , required: true},
-    isTeacher: {type: Boolean , required: true},
-    stuScore: {type: Array , required: true},
-    stuRank: {type: Array , required: true},
-    taindex: {type: Number , required: true},
-    judgeGroup: {type: Array , required: true},
-    judgeStudents: {type: Array , required: true},
-    correspondTA: {type: String , required: true},
-    assignments : {type: Array , required: true}
+    username : {type:String },
+    password : {type:String },
+    stuName : {type: String },
+    stuGroup: {type: String },
+    isStudent : {type: Boolean },
+    isTA: {type: Boolean },
+    isAdmin: {type: Boolean },
+    isTeacher: {type: Boolean },
+    stuScore: {type: Array },
+    stuRank: {type: Array },
+    taindex: {type: Number },
+    judgeGroup: {type: Array },
+    judgeStudents: {type: Array },
+    correspondTA: {type: String },
+    assignments : []
 });
-
 
 var groupSchema = new Schema({
     students: {type: Array , required: true},
@@ -28,7 +28,7 @@ var groupSchema = new Schema({
 var Group = mongoose.model('Group', groupSchema);
 
 var sourceSchema = new Schema ({
-    index: {type: String , required: true},
+    index: {type: String },
     submissions: {type: Array , required: true}
 });
 var Source = mongoose.model('Source', sourceSchema);
@@ -81,20 +81,21 @@ var assignmentsSchema = new Schema({
 var Assignmants = mongoose.model('Assignments', assignmentsSchema);
 
 var asignmentSchema = new Schema({
-    index: {type: String , required: true},
-    job : {type: Object , required: true},
-    recvComment: {type: Array , required: true},
-    sendComment: {type: Array , required: true},
-    assessGroup: {type: String , required: true},
-    timeStamp: {type: String , required: true},
-    finished: {type: String , required: true},
-    taComment: {type: Array , required: true},
-    rank: {type: String , required: true},
-    position: {type: Object , required: true},
-    ended: {type: Boolean , required: true},
-    source: {type: Object , required: true},
+    index: {type: String },
+    job : {type: Object },
+    recvComment: {type: Array },
+    sendComment: {type: Array },
+    assessGroup: {type: String },
+    timeStamp: {type: String },
+    finished: {type: String },
+    taComment: {type: Array },
+    rank: {type: String },
+    position: {type: Object },
+    ended: {type: Boolean },
+    source: {type: Object },
     github: {type: String},
-    scorelist: {type: Array}
+    scorelist: {type: Array},
+    score:{type:Number, required:true}
 });
 var Assignment = mongoose.model('Assignment', asignmentSchema);
 
@@ -111,6 +112,7 @@ userSchema.methods.checkUserValid = function(username,password){
     });
 };
 
+
 var User = mongoose.model('User', userSchema);
 var Job = mongoose.model('Job', jobSchema);
 module.exports = {
@@ -122,6 +124,8 @@ module.exports = {
     Job :Job,
     Jobs:Jobs
 };
+
+
 // module.exports.User= User;
 // module.exports.Group = Group;
 // module.exports.Source = Source;

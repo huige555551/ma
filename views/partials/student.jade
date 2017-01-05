@@ -1,0 +1,26 @@
+div.container-fluid
+    div.row
+        div.col-md-8.col-md-offset-3
+            h1 查找内容:
+                input(type='text', placeholder='', ng-model='search')
+    div.row
+        div.col-md-4(ng-repeat='assignment in assignments | filter:search')
+            div.jumbotron
+                h3 {{assignment.job.title}}
+                p(ng-show='(assignment.finished-nowtime)>=0') [状态：进行中]
+                p(ng-show='(assignment.finished-nowtime)<0') [已经截止了]
+                p 开始时间 {{assignment.timeStamp | date:'yyyy-MM-dd HH:mm:ss'}}
+                p 截止时间 {{assignment.finished | date:'yyyy-MM-dd HH:mm:ss'}}
+                form(role='form', ng-show='(assignment.finished-nowtime)>=0')
+                    div.form-group
+                        input.form-control(type='text', ng-model='assignment.github')
+                        button.btn.btn-default(ng-click='submitSource(assignment.github,assignment.index)') 上传源码
+                        p(ng-show='submitSuccess') 上传成功
+                p 最终分数：
+                a.btn.btn-default.btn-primary(href='{{assignment.job.refer}}', target='_blank') 详情
+                |  -
+                a.btn.btn-default.btn-primary(ng-href='') 评论
+                |  -
+                a.btn.btn-default.btn-primary(ng-href='') 源码
+                |  -
+                a.btn.btn-default.btn-primary(href='assignment.github') github
