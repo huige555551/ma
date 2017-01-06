@@ -27,6 +27,7 @@ function secondToDate(time) {
     var time = date.getFullYear() + "-" + (date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)) + "-" + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
     return time;
 }
+//老师发布作业
 exports.jobPost = function (req, res) {
     var job = {
         'title': req.body.title,
@@ -34,7 +35,7 @@ exports.jobPost = function (req, res) {
         'available': true,
         'index': '0'
     };
-    //"2013-02-15 21:00:00"
+    //例如："2013-02-15 21:00:00"
     var time = req.body.startYear + '-' + req.body.startMonth + '-' + req.body.startDay + " " + req.body.startHour + ':' + req.body.startMinute + ':' + req.body.startSecond;
     job.startDate = parseInt(dataToSecond(time));
     job.endDate = parseInt(dataToSecond(time)) + parseInt(req.body.duration) * (24 * 60 * 60) * 1000;
@@ -76,7 +77,7 @@ exports.jobPost = function (req, res) {
         }
     });
 }
-
+//学生获取所有作业
 exports.assignments = function (req, res) {
     var user = req.session.user;
     User.findOne({'username': user.username}).then(function (data) {
@@ -86,14 +87,13 @@ exports.assignments = function (req, res) {
             res.json(false);
     })
 }
-
+//学生提交作业
 exports.assignmentsPost = function (req, res) {
-
     var userId = req.body.userId;
     var assignmentIndex = req.body.index;
     var github = req.body.github;
     console.log(userId, assignmentIndex, github);
-    //根据id查找user
+
     User.findById(userId, function (err, user) {
         var newAssignments = user.assignments;
         newAssignments[assignmentIndex - 1].github = github;
@@ -103,7 +103,7 @@ exports.assignmentsPost = function (req, res) {
         })
     })
 }
-
+//ta获取要批改的作业
 exports.correctJob = function (req, res) {
     User.find({'correspondTA': req.session.user.username, 'isStudent': true}).then(function (JudgeStudent) {
         if (JudgeStudent)
@@ -112,7 +112,7 @@ exports.correctJob = function (req, res) {
             res.json({students: null});
     });
 }
-
+//ta提交要批改的作业
 exports.correctJobPost = function (req, res) {
     var correctJob = req.body;
     console.log(req.body);
@@ -131,61 +131,13 @@ exports.correctJobPost = function (req, res) {
     });
 
 }
-
-exports.posts = function (req, res) {
-    var posts = [];
-    data.posts.forEach(function (post, i) {
-        posts.push({
-            id: i,
-            title: post.title,
-            text: post.text.substr(0, 50) + '...'
-        });
+//老师获取所有人的分数
+exports.allScores = function (req, res) {
+    User.find({'isStudent': true}).then(function (allStudent) {
+        console.log(allStudent.length);
+        if (allStudent)
+            res.json({allStudent: allStudent});
+        else
+            res.json({allStudent: null});
     });
-    res.json({
-        posts: posts
-    });
-};
-
-exports.post = function (req, res) {
-    var id = req.params.id;
-    if (id >= 0 && id < data.posts.length) {
-        res.json({
-            post: data.posts[id]
-        });
-    } else {
-        res.json(false);
-    }
-};
-
-// POST
-
-exports.addPost = function (req, res) {
-    data.posts.push(req.body);
-    res.json(req.body);
-};
-
-// PUT
-
-exports.editPost = function (req, res) {
-    var id = req.params.id;
-
-    if (id >= 0 && id < data.posts.length) {
-        data.posts[id] = req.body;
-        res.json(true);
-    } else {
-        res.json(false);
-    }
-};
-
-// DELETE
-
-exports.deletePost = function (req, res) {
-    var id = req.params.id;
-
-    if (id >= 0 && id < data.posts.length) {
-        data.posts.splice(id, 1);
-        res.json(true);
-    } else {
-        res.json(false);
-    }
-};
+}

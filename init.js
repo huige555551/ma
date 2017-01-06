@@ -1,5 +1,5 @@
 var User = require('./modules/models').User;
-
+//初始化数据库，设置4个ta，20个学生，1个ta负责5个学生的作业，还有1个老师
 module.exports = {
     initUser: function () {
         User.remove({}, function (err, docs) {//删除所有的记录
@@ -63,7 +63,7 @@ module.exports = {
                     },
                     {
                         "index": 2,
-                        "github": "#",
+                        "github": '',
                         "timeStamp": 1483416732000.0,
                         "finished": 1483848732000.0,
                         "job": {
@@ -76,16 +76,29 @@ module.exports = {
                         "job": {
                             "available": true,
                             "refer": "http://my.ss.sysu.edu.cn/wiki/display/WEB/Homework+3+-+Ring+Menu",
-                            "title": "Homework3 Ring Menu"
+                            "title": "Homework3 Ring Mesadfasdfasdfnu"
                         },
                         "timeStamp": 1483543392000.0,
-                        "finished": 1483716192000.0,
-                        "github": "#",
+                        "finished": 1483589532000.0,
+                        "github": '',
                         "index": 3
+                    },
+
+                    {
+                        "job": {
+                            "available": true,
+                            "refer": "http://my.ss.sysu.edu.cn/wiki/display/WEB/Homework+5+-+Calculator",
+                            "title": "Homework5 Calculator"
+                        },
+                        "finished": 1484021532000.0,
+                        "timeStamp": 1483589532000.0,
+                        "github": "#",
+                        "index": 4
                     }
                 ]
 
             });
+
             (function (i) {
                 StudentEntity.save(function (err, doc) {
                     if (err) {

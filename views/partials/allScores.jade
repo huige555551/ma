@@ -3,13 +3,13 @@ div.container-fluid
         div.col-md-8.col-md-offset-3
             h1 查找学生:
                 input(type='text', placeholder='', ng-model='search')
-
+    div.row
+        div.col-md-offset-6
+            h3(ng-show='errorShow==true') {{error}}
     div(ng-repeat='student in students| filter:search')
         div.row
-            h2 {{student.username}}
-            div.row
-                div.col-md-offset-6
-                    h3(ng-show='errorShow==true') {{error}}
+            div.col-md-12
+                h2 学生: {{student.username}}
             div.col-md-4(ng-repeat="assignment in student.assignments | orderBy:'timeStamp'")
                 div.jumbotron
                     h3 {{assignment.job.title}}

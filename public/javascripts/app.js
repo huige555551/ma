@@ -14,6 +14,9 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives'])
     }).when('/teacher', {
         templateUrl: 'partials/teacher',
         controller: TeacherCtrl
+    }).when('/allScores', {
+        templateUrl: 'partials/allScores',
+        controller: AllScoresCtrl
     }).when('/ta', {
         templateUrl: 'partials/ta',
         controller: TaCtrl

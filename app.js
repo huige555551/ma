@@ -62,6 +62,7 @@ app.get('/api/assignments', api.assignments);
 app.post('/api/assignments', api.assignmentsPost);
 app.post('/api/jobs',api.jobPost);
 app.get('/api/correctJob',api.correctJob);
+app.get('/api/allScores',api.allScores);
 app.post('/api/correctJob',api.correctJobPost);
 
 // app.get('/api/assignment',api.jobs);

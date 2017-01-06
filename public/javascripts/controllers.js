@@ -18,7 +18,7 @@ function mainCtrl($scope, $location, $http) {
             return false;
     }
 }
-
+//根据角色从index中跳转到不同的页面
 function IndexCtrl($scope, $http, $location) {
     $http.get('/api/onlineStatus').success(function (response) {
         if (response.user) {
@@ -63,8 +63,35 @@ function TeacherCtrl($scope, $http, $location) {
         })
     };
 }
-
-function TaCtrl($scope, $http) {
+function AllScoresCtrl($scope, $http, $timeout) {
+    var allStudents = [];
+    $http.get('/api/allScores').success(function (response) {
+        console.log('allStudents', response);
+        allStudents = response.allStudent;
+        $scope.students = response.allStudent;
+    });
+    $scope.nowtime = Date.parse(new Date());
+    $scope.submitScoreAndComment = function (score, comment, userId, assignmentIndex) {
+        $scope.errorShow = false;
+        $http.post('/api/correctJob', {
+            score: score,
+            comment: comment,
+            userId: userId,
+            assignmentIndex: assignmentIndex
+        }).success(function (response) {
+            console.log(response);
+            if (response.status == '1') {
+                $scope.errorShow = true;
+                $scope.error = '上传成功'
+                $timeout(function () {
+                    $scope.errorShow = false;
+                }, 2000);
+            }
+        })
+    }
+}
+function TaCtrl($scope, $http, $timeout) {
+    $scope.nowtime = Date.parse(new Date());
     $http.get('/api/correctJob').success(function (response) {
         console.log(response);
         if (response.students)
@@ -73,23 +100,35 @@ function TaCtrl($scope, $http) {
             $scope.error = '你没有批改的学生';
     });
     $scope.submitScoreAndComment = function (score, comment, userId, assignmentIndex) {
-        $http.post('/api/correctJob',{score:score,comment:comment,userId:userId,assignmentIndex: assignmentIndex}).success(function (response) {
+        $scope.errorShow = false;
+        $http.post('/api/correctJob', {
+            score: score,
+            comment: comment,
+            userId: userId,
+            assignmentIndex: assignmentIndex
+        }).success(function (response) {
             console.log(response);
+            if (response.status == '1') {
+                $scope.errorShow = true;
+                $scope.error = '上传成功'
+                $timeout(function () {
+                    $scope.errorShow = false;
+                }, 2000);
+            }
         })
     }
 }
 
 function StudentCtrl($scope, $http, $location, $timeout) {
-
+    $scope.myVar = false;
+    $scope.nowtime = Date.parse(new Date());
     $http.get('/api/assignments').success(function (response) {
         if (response.assignments) {
-            console.log('assignments',response.assignments);
+            console.log('assignments', response.assignments);
             $scope.assignments = response.assignments;
-            $scope.nowtime = Date.parse(new Date());
         }
     });
     $scope.submitSource = function (assignmentGithub, assignmentIndex) {
-
         $http.post('/api/assignments', {
             github: assignmentGithub,
             index: assignmentIndex,
@@ -106,8 +145,11 @@ function StudentCtrl($scope, $http, $location, $timeout) {
             else
                 $scope.submitSuccess = false;
         })
-    }
+    };
 }
+
+
+
 function SigninCtrl($scope, $http, $location) {
     $scope.error = false;
     $scope.form = {};
@@ -133,6 +175,7 @@ function PublishJobCtrl($scope, $http, $location) {
 
 
 }
+
 function SignoutCtrl($scope, $http, $location) {
     $http.get('/signout').success(function (data) {
         currentUser = 'null';
@@ -147,37 +190,6 @@ function SignoutCtrl($scope, $http, $location) {
     })
 }
 
-function ReadPostCtrl($scope, $http, $routeParams) {
-    $http.get('/api/post/' + $routeParams.id).success(function (data) {
-        $scope.post = data.post;
-    });
-}
 
-function EditPostCtrl($scope, $http, $location, $routeParams) {
-    $scope.form = {};
-    $http.get('/api/post/' + $routeParams.id).success(function (data) {
-        $scope.form = data.post;
-    });
 
-    $scope.editPost = function () {
-        $http.put('/api/post/' + $routeParams.id, $scope.form).success(function (data) {
-            $location.url('/readPost/' + $routeParams.id);
-        });
-    };
-}
 
-function DeletePostCtrl($scope, $http, $location, $routeParams) {
-    $http.get('/api/post/' + $routeParams.id).success(function (data) {
-        $scope.post = data.post;
-    });
-
-    $scope.deletePost = function () {
-        $http.delete('/api/post/' + $routeParams.id).success(function (data) {
-            $location.url('/');
-        });
-    };
-
-    $scope.home = function () {
-        $location.url('/');
-    };
-}
