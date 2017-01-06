@@ -43,122 +43,7 @@ app.use(session({
   saveUninitialized :false,
   secret: 'keyboard cat'
 }));
-User.remove({},function(err,docs){//删除id为4的记录
-  console.log('remove success');
-});
-(function (){
-  var UserEntity = new User({
-    "username": 's3',
-    "password": 's3',
-    'stuName': 'noname',
-    'isStudent':true,
-    "isTA": false,
-    "isTeacher": false,
-    "isAdmin": false,
-    "stuGroup": -1,
-    "taindex": 0,
-    "judgeGroup": [-1],
-    "judgeStudents": [-1],
-    "correspondTA": "-1",
-    "stuScore": [-1],
-    "stuRank": [-1],
-  });
-  UserEntity.save(function(err,doc){
-    if(err){
-      console.log("error :" + err);
-    } else {
-      console.log("Saving "+doc);
-    }
-  });
-})();
-(function (){
-  var UserEntity = new User({
-    "username": 't',
-    "password": 't',
-    'stuName': 'noname',
-    'isStudent':false,
-    "isTA": false,
-    "isTeacher": true,
-    "isAdmin": false,
-    "stuGroup": -1,
-    "taindex": 0,
-    "judgeGroup": [-1],
-    "judgeStudents": [-1],
-    "correspondTA": "-1",
-    "stuScore": [-1],
-    "stuRank": [-1],
-  });
-  UserEntity.save(function(err,doc){
-    if(err){
-      console.log("error :" + err);
-    } else {
-      console.log("Saving "+doc);
-    }
-  });
-})();
-(function (){
-  var UserEntity = new User({
-    "username": 'ta',
-    "password": 'ta',
-    'stuName': 'noname',
-    'isStudent':false,
-    "isTA": true,
-    "isTeacher": false,
-    "isAdmin": false,
-    "stuGroup": -1,
-    "taindex": 0,
-    "judgeGroup": [-1],
-    "judgeStudents": [-1],
-    "correspondTA": "-1",
-    "stuScore": [-1],
-    "stuRank": [-1],
-  });
-  UserEntity.save(function(err,doc){
-    if(err){
-      console.log("error :" + err);
-    } else {
-      console.log("Saving "+doc);
-    }
-  });
-})();
-(function (){
-  var UserEntity = new User({
-    "username": 's',
-    "password": 's',
-    'stuName': 'noname',
-    'isStudent':true,
-    "isTA": false,
-    "isTeacher": false,
-    "isAdmin": false,
-    "stuGroup": -1,
-    "taindex": 0,
-    "judgeGroup": [-1],
-    "judgeStudents": [-1],
-    "correspondTA": "-1",
-    "stuScore": [-1],
-    "stuRank": [-1],
-    "assignments": [
-      {
-        "job": {
-          "available": true,
-          "refer": "http://my.ss.sysu.edu.cn/wiki/display/WEB/Homework+2+-+Movie+Review",
-          "title": "Homework2 Movie Review"
-        },
-        "finished": 1483848732000.0,
-        "timeStamp": 1483416732000.0,
-        "github": "http://ourjs.com/detail/53ad24edb984bb4659000013",
-        "index": 1
-      }
-    ]
-  });
-  UserEntity.save(function(err,doc){
-    if(err){
-      console.log("error :" + err);
-    } else {
-      console.log("Saving "+doc);
-    }
-  });
-})();
+init.initUser();
 // Routes
 
 app.get('/', routes.index);
@@ -176,6 +61,9 @@ app.get('/api/onlineStatus',api.onlineStatus);
 app.get('/api/assignments', api.assignments);
 app.post('/api/assignments', api.assignmentsPost);
 app.post('/api/jobs',api.jobPost);
+app.get('/api/correctJob',api.correctJob);
+app.post('/api/correctJob',api.correctJobPost);
+
 // app.get('/api/assignment',api.jobs);
 
 // app.put('/api/post/:id', api.editPost);

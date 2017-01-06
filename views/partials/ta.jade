@@ -1,0 +1,34 @@
+div.container-fluid
+    div.row
+        div.col-md-8.col-md-offset-3
+            h1 查找内容:
+                input(type='text', placeholder='', ng-model='search')
+    div {{error}}
+    div(ng-repeat='student in students| filter:search')
+        div.row
+            h2 {{student.username}}
+            div.col-md-4(ng-repeat="assignment in student.assignments | orderBy:'timeStamp'")
+                div.jumbotron
+                    h3 {{assignment.job.title}}
+                    p(ng-show='(assignment.finished-nowtime)>=0') [状态：进行中]
+                    p(ng-show='(assignment.finished-nowtime)<0') [已经截止了]
+                    p 开始时间 {{assignment.timeStamp | date:'yyyy-MM-dd HH:mm:ss'}}
+                    p 截止时间 {{assignment.finished | date:'yyyy-MM-dd HH:mm:ss'}}
+                    form(role='form')
+                        div.form-group
+                            labelcontrol-label 分数
+                            div
+                                input(type='text', ng-model='assignment.score')
+                        div.form-group
+                            label.control-label 评价
+                            div
+                                input(type='text', ng-model='assignment.taComment')
+                        div.form-group
+                            labelcontrol-label
+                            div
+                                input#reset.btn.btn-default.btn-primary(type="reset",value="重置")
+                                input#submit.btn.btn-default.btn-primary(type="submit",ng-click='submitScoreAndComment(assignment.score, assignment.taComment, student._id, assignment.index)',value="提交")
+                    p 最终分数：{{assignment.score}}
+                    a.btn.btn-default.btn-primary(href='{{assignment.job.refer}}', target='_blank') 详情
+                    |  -
+                    a.btn.btn-default.btn-primary(href='{{assignment.github}}', target='_blank') 下载代码

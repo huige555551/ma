@@ -33,7 +33,6 @@ exports.jobPost = function (req, res) {
         'refer': req.body.refer,
         'available': true,
         'index': '0'
-
     };
     //"2013-02-15 21:00:00"
     var time = req.body.startYear + '-' + req.body.startMonth + '-' + req.body.startDay + " " + req.body.startHour + ':' + req.body.startMinute + ':' + req.body.startSecond;
@@ -103,6 +102,34 @@ exports.assignmentsPost = function (req, res) {
             res.json({status: 1, error: '修改成功！'});
         })
     })
+}
+
+exports.correctJob = function (req, res) {
+    User.find({'correspondTA': req.session.user.username, 'isStudent': true}).then(function (JudgeStudent) {
+        if (JudgeStudent)
+            res.json({students: JudgeStudent});
+        else
+            res.json({students: null});
+    });
+}
+
+exports.correctJobPost = function (req, res) {
+    var correctJob = req.body;
+    console.log(req.body);
+    User.findById(correctJob.userId, function (err, user) {
+        if (user) {
+            var newAssignments = user.assignments;
+            newAssignments[correctJob.assignmentIndex - 1].score = correctJob.score;
+            newAssignments[correctJob.assignmentIndex - 1].taComment = correctJob.comment;
+            User.findByIdAndUpdate(correctJob.userId, {$set: {'assignments': newAssignments}}, function (err, docs) {
+                console.log('doc', docs);
+                res.json({status: 1, error: '评分成功！'});
+            })
+        }
+        else
+            res.json({status: 0, error: '没有找到该用户！'})
+    });
+
 }
 
 exports.posts = function (req, res) {

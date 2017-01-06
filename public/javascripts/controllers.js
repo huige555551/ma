@@ -20,7 +20,6 @@ function mainCtrl($scope, $location, $http) {
 }
 
 function IndexCtrl($scope, $http, $location) {
-
     $http.get('/api/onlineStatus').success(function (response) {
         if (response.user) {
             $scope.currentUser = {'username': response.user.username};
@@ -43,21 +42,21 @@ function IndexCtrl($scope, $http, $location) {
     });
 }
 
-function TeacherCtrl($scope, $http, $location){
+function TeacherCtrl($scope, $http, $location) {
     $scope.job = {
-        title       : 'Homework2 Movie Review',
-        refer       : 'http://my.ss.sysu.edu.cn/wiki/display/WEB/Homework+2+-+Movie+Review',
-        startYear   : '2017',
-        startMonth  : '01',
-        startDay    : '03',
-        startHour   : '12',
-        startMinute : '12',
-        startSecond : '12',
-        duration    : '5'
+        title: 'Homework2 Movie Review',
+        refer: 'http://my.ss.sysu.edu.cn/wiki/display/WEB/Homework+2+-+Movie+Review',
+        startYear: '2017',
+        startMonth: '01',
+        startDay: '03',
+        startHour: '12',
+        startMinute: '12',
+        startSecond: '12',
+        duration: '5'
     }
-    $scope.postJob = function(){
+    $scope.postJob = function () {
         $http.post('/api/jobs', $scope.job).success(function (res) {
-            if(res=='true')
+            if (res == 'true')
                 $scope.publish = true;
             else
                 $scope.publish = false;
@@ -65,24 +64,45 @@ function TeacherCtrl($scope, $http, $location){
     };
 }
 
-function TaCtrl($scope, $http){
-
+function TaCtrl($scope, $http) {
+    $http.get('/api/correctJob').success(function (response) {
+        console.log(response);
+        if (response.students)
+            $scope.students = response.students;
+        else
+            $scope.error = '你没有批改的学生';
+    });
+    $scope.submitScoreAndComment = function (score, comment, userId, assignmentIndex) {
+        $http.post('/api/correctJob',{score:score,comment:comment,userId:userId,assignmentIndex: assignmentIndex}).success(function (response) {
+            console.log(response);
+        })
+    }
 }
 
-function StudentCtrl($scope, $http, $location){
-    $http.get('/api/assignments').success(function (response){
-      if(response.assignments){
-          console.log(response.assignments);
-          $scope.assignments = response.assignments;
-          $scope.nowtime = Date.parse(new Date());
-      }
-    });
-    $scope.submitSource = function(assignmentGithub, assignmentIndex) {
+function StudentCtrl($scope, $http, $location, $timeout) {
 
-        $http.post('/api/assignments', {github :assignmentGithub, index:assignmentIndex, userId:userId}).success(function(response) {
+    $http.get('/api/assignments').success(function (response) {
+        if (response.assignments) {
+            console.log('assignments',response.assignments);
+            $scope.assignments = response.assignments;
+            $scope.nowtime = Date.parse(new Date());
+        }
+    });
+    $scope.submitSource = function (assignmentGithub, assignmentIndex) {
+
+        $http.post('/api/assignments', {
+            github: assignmentGithub,
+            index: assignmentIndex,
+            userId: userId
+        }).success(function (response) {
             console.log(response);
-            if(response.status == '1')
+            if (response.status == '1') {
                 $scope.submitSuccess = true;
+                $timeout(function () {
+                    console.log($scope.submitSuccess);
+                    $scope.submitSuccess = false;
+                }, 2000);
+            }
             else
                 $scope.submitSuccess = false;
         })
@@ -113,7 +133,7 @@ function PublishJobCtrl($scope, $http, $location) {
 
 
 }
-function SignoutCtrl($scope, $http, $location){
+function SignoutCtrl($scope, $http, $location) {
     $http.get('/signout').success(function (data) {
         currentUser = 'null';
         isLogin = false;
