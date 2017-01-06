@@ -14,6 +14,6 @@
 1. 布置作业； (完成)
 2. 查看评审作业；(完成)
 
-##启动：  
-npm install
+##启动：
+npm install   
 npm start
